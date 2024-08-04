@@ -33,7 +33,8 @@ function submitData() {
       .then((Response) => Response.json())
       .then((data) => {
         if (data.status === 200) {
-          populateData();
+          addRowToTable(data.editedCar);
+          closeForm();
         } else {
           console.error("Error editing data");
         }
@@ -42,7 +43,6 @@ function submitData() {
         alert("Something went Wrong! Try Again");
         console.error("Error editing data", error);
       });
-    document.getElementById("add").style.display = "none";
   } else {
     fetch("/create", {
       method: "POST",
@@ -55,7 +55,7 @@ function submitData() {
       .then((data) => {
         if (data.status === 201) {
           addRowToTable(data.newRecord);
-          closeModal();
+          closeForm();
           console.log("Data added successfully");
         } else {
           alert("Something went Wrong! Try Again");
@@ -70,60 +70,71 @@ function submitData() {
   }
 }
 
-function closeModal() {
-  const modal = document.querySelector("#addEditModal");
-  const bootstrapModal = bootstrap.Modal.getInstance(modal);
-  bootstrapModal.hide();
-}
-
-function addRowToTable(data) {
-  tableBody.innerHTML += `
-                          <tr data-id="${data.id}">
-                              <td>${data.name}</td>
-                              <td>${data.model}</td>
-                              <td>${data.color}</td>
-                              <td>${data.year}</td>
-                              <td>
-                                  <button type="button" class="btn btn-edit" onclick="showForm('${data.id}')" data-bs-toggle="modal" data-bs-target="#addEditModal"><i class="fas fa-edit"></i></button>&nbsp;
-                                  <button type="button" class="btn btn-del" data-id="${data.id}" data-bs-toggle="modal" data-bs-target="#deleteModal"><i class="fas fa-trash"></i></button>
-                              </td>
-                          </tr>
-                        `;
-}
-
-let tableData = [];
-function populateData() {
-  if (tableData.length === 0) {
-    fetch("/data")
-      .then((Response) => Response.json())
-      .then((cars) => {
-        tableData = cars;
-        renderTableBody(tableData);
-      })
-      .catch((error) => {
-        console.error("Error fetching data", error);
-        alert("Something went Wrong! Try Again");
-      });
+function addRowToTable(car) {
+  const row = document.querySelector(`tr[data-id="${car.id}"]`);
+  if (row) {
+    row.innerHTML = `
+      <td>${car.name}</td>
+      <td>${car.model}</td>
+      <td>${car.color}</td>
+      <td>${car.year}</td>
+      <td>
+      <button type="button" class="btn btn-edit" onclick="showForm('${car.id}')" data-bs-toggle="modal" data-bs-target="#addEditModal"><i class="fas fa-edit"></i></button>&nbsp;
+      <button type="button" class="btn btn-del" data-id="${car.id}" data-bs-toggle="modal" data-bs-target="#deleteModal"><i class="fas fa-trash"></i></button>
+      <span class="new-label">Edited</span>
+      </td>
+    `;
+    console.log("Row Edited Successfully");
+  } else {
+    tableBody.innerHTML += `
+      <tr data-id="${car.id}">
+      <td>${car.name}</td>
+      <td>${car.model}</td>
+      <td>${car.color}</td>
+      <td>${car.year}</td>
+      <td>
+      <button type="button" class="btn btn-edit" onclick="showForm('${car.id}')" data-bs-toggle="modal" data-bs-target="#addEditModal"><i class="fas fa-edit"></i></button>&nbsp;
+      <button type="button" class="btn btn-del" data-id="${car.id}" data-bs-toggle="modal" data-bs-target="#deleteModal"><i class="fas fa-trash"></i></button>
+      <span class="new-label">New</span>
+      </td>
+      </tr>
+    `;
   }
 }
 
 let tableBody = document.getElementById("data-body");
-function renderTableBody(tableData) {
-  tableData.cars.forEach((item) => {
-    // Rebuild the table with updated data
-    tableBody.innerHTML += `
-                            <tr data-id="${item.id}">
-                                <td>${item.name}</td>
-                                <td>${item.model}</td>
-                                <td>${item.color}</td>
-                                <td>${item.year}</td>
-                                <td>
-                                    <button type="button" class="btn btn-edit" onclick="showForm('${item.id}')" data-bs-toggle="modal" data-bs-target="#addEditModal"><i class="fas fa-edit"></i></button>&nbsp;
-                                    <button type="button" class="btn btn-del" data-id="${item.id}" data-bs-toggle="modal" data-bs-target="#deleteModal"><i class="fas fa-trash"></i></button>
-                                </td>
-                            </tr>
-                        `;
-  });
+function populateData() {
+  fetch("/data")
+    .then((Response) => Response.json())
+    .then((cars) => {
+      tableData = cars;
+      tableData.cars.forEach((car) => {
+        // Build the table with data
+        tableBody.innerHTML += `
+          <tr data-id="${car.id}">
+          <td>${car.name}</td>
+          <td>${car.model}</td>
+          <td>${car.color}</td>
+          <td>${car.year}</td>
+          <td>
+          <button type="button" class="btn btn-edit" onclick="showForm('${car.id}')" data-bs-toggle="modal" data-bs-target="#addEditModal"><i class="fas fa-edit"></i></button>&nbsp;
+          <button type="button" class="btn btn-del" data-id="${car.id}" data-bs-toggle="modal" data-bs-target="#deleteModal"><i class="fas fa-trash"></i></button>
+          <span class="new-label" style="display: none">New</span>
+          </td>
+          </tr>
+          `;
+      });
+    })
+    .catch((error) => {
+      console.error("Error fetching data", error);
+      alert("Something went Wrong! Try Again");
+    });
+}
+
+function closeForm() {
+  const modal = document.querySelector("#addEditModal");
+  const bootstrapModal = bootstrap.Modal.getInstance(modal);
+  bootstrapModal.hide();
 }
 
 function showForm(id) {
@@ -132,11 +143,13 @@ function showForm(id) {
       e.preventDefault();
     }
   });
+
   const messages = document.querySelectorAll(".require");
   messages.forEach((message) => {
     message.style.display = "none";
   });
-  const dataToEdit = tableData.cars.find((item) => item.id === id);
+
+  const dataToEdit = tableData.cars.find((car) => car.id === id);
 
   if (dataToEdit) {
     document.querySelector("#addEditModalLabel").innerText = "Edit Record";
