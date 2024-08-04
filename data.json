@@ -1,0 +1,88 @@
+{
+    "cars": [
+        {
+            "id": "7igq5ltndymf17a578ps",
+            "name": "Tata",
+            "model": "Harrier",
+            "color": "Black",
+            "year": "2022"
+        },
+        {
+            "id": "skxoxb5qo5bo44iz9vj6",
+            "name": "Tata",
+            "model": "Nexon",
+            "color": "Grey",
+            "year": "2023"
+        },
+        {
+            "id": "ncm79p3tyxq4wyymmsjb",
+            "name": "Mahindra",
+            "model": "Thar",
+            "color": "Black",
+            "year": "2020"
+        },
+        {
+            "id": "sumky139ru6bkxvtc4yd",
+            "name": "Hyundai",
+            "model": "Alcazar",
+            "color": "White",
+            "year": "2022"
+        },
+        {
+            "id": "xnro5ynv56ri6yql8wmn",
+            "name": "Suzuki",
+            "model": "Swift",
+            "color": "Blue",
+            "year": "2023"
+        },
+        {
+            "id": "ii64v238ncaqp7ariao7",
+            "name": "Toyota",
+            "model": "Glanza",
+            "color": "White",
+            "year": "2022"
+        },
+        {
+            "id": "nw7vqtostlisq6uz1lm9",
+            "name": "Hyundai",
+            "model": "Verna",
+            "color": "Black",
+            "year": "2023"
+        },
+        {
+            "id": "0tko6d0ytjc1vc0i5mb3",
+            "name": "Tata",
+            "model": "Nexon",
+            "color": "Grey",
+            "year": "2024"
+        },
+        {
+            "id": "qhcluvyijibwig3u6de3",
+            "name": "Hyundai",
+            "model": "Verna",
+            "color": "White",
+            "year": "2022"
+        },
+        {
+            "id": "qu2h7l3l6r5n0ztakp4t",
+            "name": "Audi",
+            "model": "R6",
+            "color": "Black",
+            "year": "2022"
+        },
+        {
+            "id": "xtf56atyhrji5r881rjj",
+            "name": "Merzuki",
+            "model": "G-WagonR",
+            "color": "Blight",
+            "year": "2022"
+        },
+        {
+            "id": "4z7n3h7ktk5wcpr5xkf3",
+            "name": "Toyota",
+            "model": "Innova",
+            "color": "White",
+            "year": "2024"
+        }
+    ]
+}
